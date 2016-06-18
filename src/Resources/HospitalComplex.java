@@ -9,7 +9,9 @@ public class HospitalComplex implements Serializable{
     private int paramedics;
     private int ambulances;
     private String ranking;
-
+    
+    
+ 
     public HospitalComplex() {
     }
 

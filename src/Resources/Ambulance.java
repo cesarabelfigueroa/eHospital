@@ -8,6 +8,7 @@ public class Ambulance implements Serializable {
     private int year;
     private double speed;
     private HospitalComplex hospital = new HospitalComplex();
+    private boolean active = true;
 
     public Ambulance(String plateNumber, int year, double speed) {
         this.plateNumber = plateNumber;
@@ -47,8 +48,16 @@ public class Ambulance implements Serializable {
         this.hospital = hospital;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
     @Override
     public String toString() {
-        return  plateNumber;
+        return plateNumber;
     }
 }

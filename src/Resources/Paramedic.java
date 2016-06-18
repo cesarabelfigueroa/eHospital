@@ -9,6 +9,7 @@ public class Paramedic implements Serializable {
     private String id_number;
     private String ranking;
     private HospitalComplex hospital = new HospitalComplex();
+    private boolean active = true;
 
     public Paramedic() {
     }
@@ -19,7 +20,6 @@ public class Paramedic implements Serializable {
         this.id_number = id_number;
         this.ranking = ranking;
     }
-    
 
     public String getRanking() {
         return ranking;
@@ -59,6 +59,14 @@ public class Paramedic implements Serializable {
 
     public void setHospital(HospitalComplex hospital) {
         this.hospital = hospital;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     @Override

@@ -18,12 +18,9 @@ public class ModelService {
     
     public void writeFiles(){
     
-    
     }
     
     public void readFiles(){
-    
-    
     
     }   
 }
