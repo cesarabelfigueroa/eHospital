@@ -62,17 +62,62 @@ public class Application implements Serializable {
         this.hospitals = hospitals;
     }
 
-    public void deleteHospital(HospitalComplex hospital) {
-        hospitals.remove(hospital);
+    public void deleteHospital(String hospitalName) {
+        for (int i = 0; i < hospitals.size(); i++) {
+            HospitalComplex hospital = hospitals.get(i);
+            if (hospital.getName().equals(hospitalName)) {
+                hospitals.remove(hospital);
+            }
+        }
     }
 
-    public void deleteParamedics(Paramedic paramedic) {
-        HospitalComplex hospital = paramedic.getHospital();
-        hospital.getMedics().remove(paramedic);
+    public void deleteParamedics(String hospitalName, String paramedicId) {
+        for (int i = 0; i < hospitals.size(); i++) {
+            HospitalComplex hospital = hospitals.get(i);
+            if (hospital.getName().equals(hospitalName)) {
+                ArrayList<Paramedic> paramedics = hospital.getMedics();
+                for (int j = 0; j < paramedics.size(); j++) {
+                    Paramedic a = paramedics.get(j);
+                    if (a.getId_number().equals(paramedicId)) {
+                        paramedics.remove(a);
+                    }
+                }
+            }
+        }
     }
 
-    public void deleteAmbulance(Ambulance ambulance) {
-        HospitalComplex hospital = ambulance.getHospital();
-        hospital.getAmbulancesObjects().remove(ambulance);
+    public void deleteAmbulance(String hospitalName, String ambulancePlate) {
+        for (int i = 0; i < hospitals.size(); i++) {
+            HospitalComplex hospital = hospitals.get(i);
+            if (hospital.getName().equals(hospitalName)) {
+                ArrayList<Ambulance> ambulances = hospital.getAmbulancesObjects();
+                for (int j = 0; j < ambulances.size(); j++) {
+                    Ambulance a = ambulances.get(j);
+                    if (a.getPlateNumber().equals(ambulancePlate)) {
+                        ambulances.remove(a);
+                    }
+                }
+            }
+        }
+    }
+
+    public void moveAmbulance(HospitalComplex newHospital, Ambulance ambulance) {
+        for (int i = 0; i < hospitals.size(); i++) {
+            HospitalComplex hospital = hospitals.get(i);
+            if (hospital.getAmbulancesObjects().contains(ambulance)) {
+                hospital.getAmbulancesObjects().remove(ambulance);
+                addAmbulance(newHospital, ambulance);
+            }
+        }
+    }
+
+    public void moveParamedics(HospitalComplex newHospital, Paramedic paramedic) {
+        for (int i = 0; i < hospitals.size(); i++) {
+            HospitalComplex hospital = hospitals.get(i);
+            if (hospital.getMedics().contains(paramedic)) {
+                hospital.getMedics().remove(paramedic);
+                addParamedic(newHospital, paramedic);
+            }
+        }
     }
 }

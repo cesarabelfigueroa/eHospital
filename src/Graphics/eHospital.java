@@ -258,6 +258,11 @@ public class eHospital extends javax.swing.JFrame {
 
         delete_table_ambulance.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/trash.png"))); // NOI18N
         delete_table_ambulance.setText("Eliminar");
+        delete_table_ambulance.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                delete_table_ambulanceActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -478,6 +483,11 @@ public class eHospital extends javax.swing.JFrame {
 
         delete_table_paramedics.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/trash.png"))); // NOI18N
         delete_table_paramedics.setText("Eliminar");
+        delete_table_paramedics.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                delete_table_paramedicsActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -687,6 +697,11 @@ public class eHospital extends javax.swing.JFrame {
 
         delete_table_complex.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/trash.png"))); // NOI18N
         delete_table_complex.setText("Eliminar");
+        delete_table_complex.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                delete_table_complexActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -804,6 +819,10 @@ public class eHospital extends javax.swing.JFrame {
     private void show_admin_ambulanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_show_admin_ambulanceActionPerformed
         if (app.getHospitals().size() > 0) {
             renderList(create_center_ambulance, app.getHospitals());
+            renderList(reassing_ambulance_ambulance, app.getAllAmbulances());
+            renderList(reassing_center_ambulance, app.getHospitals());
+            renderList(reassing_ambulance_ambulance, app.getAllAmbulances());
+            renderList(reassing_center_paramedics, app.getHospitals());
             DefaultTableModel tableModel = (DefaultTableModel) table_ambulance.getModel();
             ArrayList ambulances = app.getAllAmbulances();
             renderTable(tableModel, ambulances);
@@ -819,6 +838,8 @@ public class eHospital extends javax.swing.JFrame {
             ArrayList paramedics = app.getAllParamedics();
             renderTable(tableModel, paramedics);
             renderList(create_center_paramedics, app.getHospitals());
+            renderList(reassing_paramedic_paramedic, app.getAllParamedics());
+            renderList(reassing_center_paramedics, app.getHospitals());
             showDialog(window_admin_paramedics);
         } else {
             JOptionPane.showMessageDialog(null, "No hay centros hospitalarios disponibles.");
@@ -856,8 +877,15 @@ public class eHospital extends javax.swing.JFrame {
                     break;
             }
         }
+        create_name_complex.setText("");
+        create_direction_complex.setText("");
+        JOptionPane.showMessageDialog(null, "Acción realizada con éxito.");
         HospitalComplex hospital = new HospitalComplex(name, adress, paramedics, ambulances, ranking);
         app.addHospital(hospital);
+        renderList(reassing_paramedic_paramedic, app.getAllParamedics());
+        renderList(reassing_center_paramedics, app.getHospitals());
+        renderList(reassing_ambulance_ambulance, app.getAllAmbulances());
+        renderList(reassing_center_paramedics, app.getHospitals());
         md.writeFiles(app);
         DefaultTableModel model = (DefaultTableModel) table_complex.getModel();
         renderTable(model, app.getHospitals());
@@ -875,15 +903,41 @@ public class eHospital extends javax.swing.JFrame {
             DefaultTableModel tableModel = (DefaultTableModel) table_ambulance.getModel();
             ArrayList ambulances = app.getAllAmbulances();
             renderTable(tableModel, ambulances);
+            renderList(reassing_ambulance_ambulance, app.getAllAmbulances());
+            renderList(reassing_center_ambulance, app.getHospitals());
+            create_plact_ambulance.setText("");
+            JOptionPane.showMessageDialog(null, "Acción realizada con éxito.");
         }
     }//GEN-LAST:event_create_ambulance_aceptActionPerformed
 
     private void reassing_ambulance_aceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reassing_ambulance_aceptActionPerformed
-        // TODO add your handling code here:
+        if (app.getAllAmbulances().size() > 0 && app.getHospitals().size() > 0) {
+            Ambulance ambulance = (Ambulance) reassing_ambulance_ambulance.getModel().getSelectedItem();
+            HospitalComplex newHospitalComplex = (HospitalComplex) reassing_center_ambulance.getModel().getSelectedItem();
+            app.moveAmbulance(newHospitalComplex, ambulance);
+            DefaultTableModel tableModel = (DefaultTableModel) table_ambulance.getModel();
+            ArrayList ambulances = app.getAllAmbulances();
+            renderTable(tableModel, ambulances);
+            md.writeFiles(app);
+            JOptionPane.showMessageDialog(null, "Acción realizada con éxito.");
+        } else {
+            JOptionPane.showMessageDialog(null, "No hay ambulancias o centros hospitalarios.");
+        }
     }//GEN-LAST:event_reassing_ambulance_aceptActionPerformed
 
     private void reassing_paramedics_aceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reassing_paramedics_aceptActionPerformed
-        // TODO add your handling code here:
+        if (app.getAllParamedics().size() > 0 && app.getHospitals().size() > 0) {
+            Paramedic paramedic = (Paramedic) reassing_paramedic_paramedic.getModel().getSelectedItem();
+            HospitalComplex newHospitalComplex = (HospitalComplex) reassing_center_paramedics.getModel().getSelectedItem();
+            app.moveParamedics(newHospitalComplex, paramedic);
+            DefaultTableModel tableModel = (DefaultTableModel) table_paramedics.getModel();
+            ArrayList paramedics = app.getAllParamedics();
+            renderTable(tableModel, paramedics);
+            md.writeFiles(app);
+            JOptionPane.showMessageDialog(null, "Acción realizada con éxito.");
+        } else {
+            JOptionPane.showMessageDialog(null, "No hay paramédicos o centros hospitalarios.");
+        }
     }//GEN-LAST:event_reassing_paramedics_aceptActionPerformed
 
     private void create_paramedics_aceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_create_paramedics_aceptActionPerformed
@@ -913,13 +967,67 @@ public class eHospital extends javax.swing.JFrame {
         }
         if (hospital != null) {
             Paramedic param = new Paramedic(name, age, id, ranking);
+            create_name_paramedics.setText("");
+            create_id_paramedics.setText("");
             app.addParamedic(hospital, param);
             DefaultTableModel tableModel = (DefaultTableModel) table_paramedics.getModel();
             ArrayList paramedics = app.getAllParamedics();
             renderTable(tableModel, paramedics);
+            renderList(reassing_paramedic_paramedic, app.getAllParamedics());
+            renderList(reassing_center_paramedics, app.getHospitals());
             md.writeFiles(app);
+            JOptionPane.showMessageDialog(null, "Acción realizada con éxito.");
         }
     }//GEN-LAST:event_create_paramedics_aceptActionPerformed
+
+    private void delete_table_ambulanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_table_ambulanceActionPerformed
+        if (table_ambulance.getSelectedRow() >= 0) {
+            DefaultTableModel modelo = (DefaultTableModel) table_ambulance.getModel();
+            String name = modelo.getValueAt(table_ambulance.getSelectedRow(), 0).toString();
+            String hospital = modelo.getValueAt(table_ambulance.getSelectedRow(), 2).toString();
+            app.deleteAmbulance(hospital, name);
+            renderList(reassing_ambulance_ambulance, app.getAllAmbulances());
+            renderList(reassing_center_paramedics, app.getHospitals());
+            modelo.removeRow(table_ambulance.getSelectedRow());
+            table_ambulance.setModel(modelo);
+            md.writeFiles(app);
+        } else {
+            JOptionPane.showMessageDialog(null, "No hay nada seleccionado.");
+        }
+    }//GEN-LAST:event_delete_table_ambulanceActionPerformed
+
+    private void delete_table_paramedicsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_table_paramedicsActionPerformed
+        if (table_paramedics.getSelectedRow() >= 0) {
+            DefaultTableModel modelo = (DefaultTableModel) table_paramedics.getModel();
+            String id = modelo.getValueAt(table_paramedics.getSelectedRow(), 0).toString();
+            String hospital = modelo.getValueAt(table_paramedics.getSelectedRow(), 3).toString();
+            app.deleteParamedics(hospital, id);
+            renderList(reassing_paramedic_paramedic, app.getAllParamedics());
+            renderList(reassing_center_paramedics, app.getHospitals());
+            modelo.removeRow(table_paramedics.getSelectedRow());
+            table_paramedics.setModel(modelo);
+            md.writeFiles(app);
+        } else {
+            JOptionPane.showMessageDialog(null, "No hay nada seleccionado.");
+        }
+    }//GEN-LAST:event_delete_table_paramedicsActionPerformed
+
+    private void delete_table_complexActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_table_complexActionPerformed
+        if (table_complex.getSelectedRow() >= 0) {
+            DefaultTableModel modelo = (DefaultTableModel) table_complex.getModel();
+            String id = modelo.getValueAt(table_complex.getSelectedRow(), 0).toString();
+            app.deleteHospital(id);
+            modelo.removeRow(table_complex.getSelectedRow());
+            renderList(reassing_paramedic_paramedic, app.getAllParamedics());
+            renderList(reassing_center_paramedics, app.getHospitals());
+            renderList(reassing_ambulance_ambulance, app.getAllAmbulances());
+            renderList(reassing_center_paramedics, app.getHospitals());
+            table_complex.setModel(modelo);
+            md.writeFiles(app);
+        } else {
+            JOptionPane.showMessageDialog(null, "No hay nada seleccionado.");
+        }
+    }//GEN-LAST:event_delete_table_complexActionPerformed
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {

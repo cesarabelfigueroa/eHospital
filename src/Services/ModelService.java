@@ -46,7 +46,7 @@ public class ModelService {
                     oos.close();
                     fos.close();
                 } catch (Exception ex) {
-                    System.out.println("errror");
+                
                     return null;
                 }
                 return bnt;
