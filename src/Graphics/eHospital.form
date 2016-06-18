@@ -229,10 +229,10 @@
                       <Properties>
                         <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                           <Table columnCount="4" rowCount="0">
-                            <Column editable="true" title="Placa" type="java.lang.Object"/>
-                            <Column editable="true" title="Kilometraje" type="java.lang.Object"/>
-                            <Column editable="true" title="Centro Hospitalario" type="java.lang.Object"/>
-                            <Column editable="true" title="A&#xf1;o de fabricaci&#xf3;n" type="java.lang.Object"/>
+                            <Column editable="false" title="Placa" type="java.lang.Object"/>
+                            <Column editable="false" title="Velocidad" type="java.lang.Object"/>
+                            <Column editable="false" title="Centro Hospitalario" type="java.lang.Object"/>
+                            <Column editable="false" title="A&#xf1;o de fabricaci&#xf3;n" type="java.lang.Object"/>
                           </Table>
                         </Property>
                       </Properties>
@@ -545,6 +545,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="  Aceptar"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="create_paramedics_aceptActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel9">
                   <Properties>
@@ -624,11 +627,11 @@
                       <Properties>
                         <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                           <Table columnCount="5" rowCount="0">
-                            <Column editable="true" title="Identidad" type="java.lang.Object"/>
-                            <Column editable="true" title="Nombre" type="java.lang.Object"/>
-                            <Column editable="true" title="Edad" type="java.lang.Object"/>
-                            <Column editable="true" title="Centro Hospitalario" type="java.lang.Object"/>
-                            <Column editable="true" title="Ranking" type="java.lang.Object"/>
+                            <Column editable="false" title="Identidad" type="java.lang.Object"/>
+                            <Column editable="false" title="Nombre" type="java.lang.Object"/>
+                            <Column editable="false" title="Edad" type="java.lang.Object"/>
+                            <Column editable="false" title="Centro Hospitalario" type="java.lang.Object"/>
+                            <Column editable="false" title="Ranking" type="java.lang.Object"/>
                           </Table>
                         </Property>
                       </Properties>
@@ -806,12 +809,13 @@
                               <Group type="102" alignment="1" attributes="0">
                                   <Component id="jLabel12" min="-2" pref="185" max="-2" attributes="0"/>
                                   <EmptySpace max="32767" attributes="0"/>
-                                  <Component id="create_paramedicas_complex" min="-2" pref="79" max="-2" attributes="0"/>
+                                  <Component id="create_paramedics_complex" min="-2" pref="79" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" attributes="0">
                                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                   <Component id="jLabel7" min="-2" pref="107" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="429" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
+                                  <Component id="create_name_complex" min="-2" pref="405" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="1" attributes="0">
                                   <Component id="jLabel11" min="-2" pref="156" max="-2" attributes="0"/>
@@ -824,13 +828,6 @@
                           </Group>
                           <EmptySpace min="-2" pref="161" max="-2" attributes="0"/>
                       </Group>
-                      <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="252" max="-2" attributes="0"/>
-                              <Component id="create_name_complex" min="-2" pref="405" max="-2" attributes="0"/>
-                              <EmptySpace pref="162" max="32767" attributes="0"/>
-                          </Group>
-                      </Group>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
@@ -839,8 +836,11 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
                                   <EmptySpace pref="63" max="32767" attributes="0"/>
-                                  <Component id="jLabel7" min="-2" pref="44" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="jLabel7" alignment="3" min="-2" pref="44" max="-2" attributes="0"/>
+                                      <Component id="create_name_complex" alignment="3" min="-2" pref="44" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                                   <Component id="jLabel13" min="-2" pref="44" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
@@ -857,7 +857,7 @@
                           </Group>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel12" alignment="3" min="-2" pref="44" max="-2" attributes="0"/>
-                              <Component id="create_paramedicas_complex" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
+                              <Component id="create_paramedics_complex" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
@@ -867,13 +867,6 @@
                           <EmptySpace min="-2" pref="87" max="-2" attributes="0"/>
                           <Component id="create_complex_acept" min="-2" pref="59" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
-                              <Component id="create_name_complex" min="-2" pref="44" max="-2" attributes="0"/>
-                              <EmptySpace pref="428" max="32767" attributes="0"/>
-                          </Group>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -912,7 +905,7 @@
                     <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
                   </AuxValues>
                 </Component>
-                <Component class="javax.swing.JSpinner" name="create_paramedicas_complex">
+                <Component class="javax.swing.JSpinner" name="create_paramedics_complex">
                   <Properties>
                     <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
                       <SpinnerModel initial="0" minimum="0" numberType="java.lang.Integer" stepSize="1" type="number"/>
@@ -1013,11 +1006,11 @@
                       <Properties>
                         <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                           <Table columnCount="5" rowCount="0">
-                            <Column editable="true" title="Nombre" type="java.lang.Object"/>
-                            <Column editable="true" title="Direcci&#xf3;n" type="java.lang.Object"/>
-                            <Column editable="true" title="Cantidad de Ambulancias" type="java.lang.Object"/>
-                            <Column editable="true" title="Cantidad de Param&#xe9;dicos" type="java.lang.Object"/>
-                            <Column editable="true" title="Ranking" type="java.lang.Object"/>
+                            <Column editable="false" title="Nombre" type="java.lang.Object"/>
+                            <Column editable="false" title="Direcci&#xf3;n" type="java.lang.Object"/>
+                            <Column editable="false" title="Cantidad de Ambulancias" type="java.lang.Object"/>
+                            <Column editable="false" title="Cantidad de Param&#xe9;dicos" type="java.lang.Object"/>
+                            <Column editable="false" title="Ranking" type="java.lang.Object"/>
                           </Table>
                         </Property>
                       </Properties>
@@ -1041,7 +1034,7 @@
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
-    <Property name="title" type="java.lang.String" value="Complejos Hospitalarios"/>
+    <Property name="title" type="java.lang.String" value="Hospital Escuela Universitario"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>

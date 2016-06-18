@@ -1,24 +1,40 @@
 package Graphics;
 
-import java.awt.Component;
+import Resources.Ambulance;
+import Resources.HospitalComplex;
+import Resources.Paramedic;
+import Resources.Ranking;
+import Services.Application;
+import Services.ModelService;
 import java.awt.Image;
-import java.awt.Window;
+import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import org.jvnet.substance.SubstanceLookAndFeel;
 
 public class eHospital extends javax.swing.JFrame {
 
+    Application app = new Application();
+    ModelService md = new ModelService();
+
     public eHospital() {
+        Application readAPP = md.readFiles();
+        if (readAPP != null) {
+            app = readAPP;
+        }
         renderPages();
         initComponents();
         this.setLocationRelativeTo(null);
         ImageIcon logoImage = new ImageIcon("./src/img/Prince.png");
         Icon logoIcon = new ImageIcon(logoImage.getImage().getScaledInstance(logoSpace.getWidth(), logoSpace.getHeight(), Image.SCALE_DEFAULT));
         logoSpace.setIcon(logoIcon);
-        this.repaint();
 
+        this.repaint();
     }
 
     public void renderPages() {
@@ -34,6 +50,39 @@ public class eHospital extends javax.swing.JFrame {
         element.setLocationRelativeTo(this);
         element.setModal(true);
         element.setVisible(true);
+    }
+
+    public void renderTable(DefaultTableModel tableModel, ArrayList elements) {
+        tableModel.setRowCount(0);
+        if (elements.size() > 0) {
+            if (elements.get(0) instanceof HospitalComplex) {
+                for (int i = 0; i < elements.size(); i++) {
+                    HospitalComplex hospital = (HospitalComplex) elements.get(i);
+                    Object[] columns = {hospital.getName(), hospital.getAddress(), hospital.getAmbulances(), hospital.getParamedics(), hospital.getRanking()};
+                    tableModel.addRow(columns);
+                }
+            } else if (elements.get(0) instanceof Paramedic) {
+                for (int i = 0; i < elements.size(); i++) {
+                    Paramedic paramedic = (Paramedic) elements.get(i);
+                    Object[] columns = {paramedic.getId_number(), paramedic.getName(), paramedic.getAge(), paramedic.getHospital(), paramedic.getRanking()};
+                    tableModel.addRow(columns);
+                }
+            } else if (elements.get(0) instanceof Ambulance) {
+                for (int i = 0; i < elements.size(); i++) {
+                    Ambulance ambulance = (Ambulance) elements.get(i);
+                    Object[] columns = {ambulance.getPlateNumber(), ambulance.getSpeed(), ambulance.getHospital(), ambulance.getYear()};
+                    tableModel.addRow(columns);
+                }
+            }
+        }
+    }
+
+    public void renderList(JComboBox CModel, ArrayList elements) {
+        CModel.setModel(new DefaultComboBoxModel());
+        DefaultComboBoxModel model = (DefaultComboBoxModel) CModel.getModel();
+        for (int i = 0; i < elements.size(); i++) {
+            model.addElement(elements.get(i));
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -93,7 +142,7 @@ public class eHospital extends javax.swing.JFrame {
         create_direction_complex = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         create_complex_combobox = new javax.swing.JComboBox<>();
-        create_paramedicas_complex = new javax.swing.JSpinner();
+        create_paramedics_complex = new javax.swing.JSpinner();
         jLabel12 = new javax.swing.JLabel();
         create_complex_acept = new javax.swing.JButton();
         jLabel13 = new javax.swing.JLabel();
@@ -194,9 +243,17 @@ public class eHospital extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Placa", "Kilometraje", "Centro Hospitalario", "Año de fabricación"
+                "Placa", "Velocidad", "Centro Hospitalario", "Año de fabricación"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(table_ambulance);
 
         delete_table_ambulance.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/trash.png"))); // NOI18N
@@ -312,6 +369,11 @@ public class eHospital extends javax.swing.JFrame {
 
         create_paramedics_acept.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/plus.png"))); // NOI18N
         create_paramedics_acept.setText("  Aceptar");
+        create_paramedics_acept.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                create_paramedics_aceptActionPerformed(evt);
+            }
+        });
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel9.setText("Identidad");
@@ -403,7 +465,15 @@ public class eHospital extends javax.swing.JFrame {
             new String [] {
                 "Identidad", "Nombre", "Edad", "Centro Hospitalario", "Ranking"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane2.setViewportView(table_paramedics);
 
         delete_table_paramedics.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/trash.png"))); // NOI18N
@@ -510,7 +580,7 @@ public class eHospital extends javax.swing.JFrame {
 
         create_complex_combobox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "A", "B", "C", "D" }));
 
-        create_paramedicas_complex.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
+        create_paramedics_complex.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel12.setText("Cantidad de Paramédicos");
@@ -549,11 +619,12 @@ public class eHospital extends javax.swing.JFrame {
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(create_paramedicas_complex, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(create_paramedics_complex, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(429, 429, 429))
+                        .addGap(24, 24, 24)
+                        .addComponent(create_name_complex, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -561,11 +632,6 @@ public class eHospital extends javax.swing.JFrame {
                             .addComponent(create_complex_acept, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(create_complex_combobox, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(161, 161, 161))
-            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel5Layout.createSequentialGroup()
-                    .addGap(252, 252, 252)
-                    .addComponent(create_name_complex, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(162, Short.MAX_VALUE)))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -573,8 +639,10 @@ public class eHospital extends javax.swing.JFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addContainerGap(63, Short.MAX_VALUE)
-                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(29, 29, 29)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(create_name_complex, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(27, 27, 27)
                         .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -587,7 +655,7 @@ public class eHospital extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(create_paramedicas_complex, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(create_paramedics_complex, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -595,11 +663,6 @@ public class eHospital extends javax.swing.JFrame {
                 .addGap(87, 87, 87)
                 .addComponent(create_complex_acept, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(19, 19, 19))
-            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel5Layout.createSequentialGroup()
-                    .addGap(61, 61, 61)
-                    .addComponent(create_name_complex, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(428, Short.MAX_VALUE)))
         );
 
         jTabbedPane3.addTab("Creación", jPanel5);
@@ -611,7 +674,15 @@ public class eHospital extends javax.swing.JFrame {
             new String [] {
                 "Nombre", "Dirección", "Cantidad de Ambulancias", "Cantidad de Paramédicos", "Ranking"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane3.setViewportView(table_complex);
 
         delete_table_complex.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/trash.png"))); // NOI18N
@@ -660,7 +731,7 @@ public class eHospital extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Complejos Hospitalarios");
+        setTitle("Hospital Escuela Universitario");
 
         show_admin_ambulance.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/ambulance.png"))); // NOI18N
         show_admin_ambulance.setText("   Ambulancias");
@@ -731,23 +802,80 @@ public class eHospital extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void show_admin_ambulanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_show_admin_ambulanceActionPerformed
-        showDialog(window_admin_ambulance);
+        if (app.getHospitals().size() > 0) {
+            renderList(create_center_ambulance, app.getHospitals());
+            DefaultTableModel tableModel = (DefaultTableModel) table_ambulance.getModel();
+            ArrayList ambulances = app.getAllAmbulances();
+            renderTable(tableModel, ambulances);
+            showDialog(window_admin_ambulance);
+        } else {
+            JOptionPane.showMessageDialog(null, "No hay centros hospitalarios disponibles.");
+        }
     }//GEN-LAST:event_show_admin_ambulanceActionPerformed
 
     private void show_admin_paramedicsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_show_admin_paramedicsActionPerformed
-        showDialog(window_admin_paramedics);
+        if (app.getHospitals().size() > 0) {
+            DefaultTableModel tableModel = (DefaultTableModel) table_paramedics.getModel();
+            ArrayList paramedics = app.getAllParamedics();
+            renderTable(tableModel, paramedics);
+            renderList(create_center_paramedics, app.getHospitals());
+            showDialog(window_admin_paramedics);
+        } else {
+            JOptionPane.showMessageDialog(null, "No hay centros hospitalarios disponibles.");
+        }
     }//GEN-LAST:event_show_admin_paramedicsActionPerformed
 
     private void show_admin_hospitalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_show_admin_hospitalActionPerformed
+        DefaultTableModel model = (DefaultTableModel) table_complex.getModel();
+        renderTable(model, app.getHospitals());
         showDialog(window_admin_complex);
     }//GEN-LAST:event_show_admin_hospitalActionPerformed
 
     private void create_complex_aceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_create_complex_aceptActionPerformed
-        // TODO add your handling code here:
+        String name = create_name_complex.getText();
+        Ranking ranking = new Ranking();
+        String adress = create_direction_complex.getText();
+        int ambulances = Integer.parseInt(create_ambulance_complex.getValue().toString());
+        int paramedics = Integer.parseInt(create_paramedics_complex.getValue().toString());
+        String value = create_complex_combobox.getModel().getSelectedItem().toString();
+        if (null != value) {
+            switch (value) {
+                case "A":
+                    ranking = new Ranking("A", 4);
+                    break;
+                case "B":
+                    ranking = new Ranking("B", 3);
+                    break;
+                case "C":
+                    ranking = new Ranking("C", 2);
+                    break;
+                case "D":
+                    ranking = new Ranking("D", 1);
+                    break;
+                default:
+                    break;
+            }
+        }
+        HospitalComplex hospital = new HospitalComplex(name, adress, paramedics, ambulances, ranking);
+        app.addHospital(hospital);
+        md.writeFiles(app);
+        DefaultTableModel model = (DefaultTableModel) table_complex.getModel();
+        renderTable(model, app.getHospitals());
     }//GEN-LAST:event_create_complex_aceptActionPerformed
 
     private void create_ambulance_aceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_create_ambulance_aceptActionPerformed
-        // TODO add your handling code here:
+        String plate = create_plact_ambulance.getText();
+        int year = Integer.parseInt(create_date_ambulance.getValue().toString());
+        double speed = Double.parseDouble(create_speed_ambulance.getValue().toString());
+        HospitalComplex hospital = (HospitalComplex) create_center_ambulance.getModel().getSelectedItem();
+        if (hospital != null) {
+            Ambulance ambulance = new Ambulance(plate, year, speed);
+            app.addAmbulance(hospital, ambulance);
+            md.writeFiles(app);
+            DefaultTableModel tableModel = (DefaultTableModel) table_ambulance.getModel();
+            ArrayList ambulances = app.getAllAmbulances();
+            renderTable(tableModel, ambulances);
+        }
     }//GEN-LAST:event_create_ambulance_aceptActionPerformed
 
     private void reassing_ambulance_aceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reassing_ambulance_aceptActionPerformed
@@ -757,6 +885,42 @@ public class eHospital extends javax.swing.JFrame {
     private void reassing_paramedics_aceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reassing_paramedics_aceptActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_reassing_paramedics_aceptActionPerformed
+
+    private void create_paramedics_aceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_create_paramedics_aceptActionPerformed
+        String name = create_name_paramedics.getText();
+        int age = Integer.parseInt(create_age_paramedics.getValue().toString());
+        String id = create_id_paramedics.getText();
+        Ranking ranking = new Ranking();
+        HospitalComplex hospital = (HospitalComplex) create_center_paramedics.getModel().getSelectedItem();
+        String value = create_ranking_paramedics.getModel().getSelectedItem().toString();
+        if (null != value) {
+            switch (value) {
+                case "A":
+                    ranking = new Ranking("A", 4);
+                    break;
+                case "B":
+                    ranking = new Ranking("B", 3);
+                    break;
+                case "C":
+                    ranking = new Ranking("C", 2);
+                    break;
+                case "D":
+                    ranking = new Ranking("D", 1);
+                    break;
+                default:
+                    break;
+            }
+        }
+        if (hospital != null) {
+            Paramedic param = new Paramedic(name, age, id, ranking);
+            app.addParamedic(hospital, param);
+            DefaultTableModel tableModel = (DefaultTableModel) table_paramedics.getModel();
+            ArrayList paramedics = app.getAllParamedics();
+            renderTable(tableModel, paramedics);
+            md.writeFiles(app);
+        }
+    }//GEN-LAST:event_create_paramedics_aceptActionPerformed
+
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -779,8 +943,8 @@ public class eHospital extends javax.swing.JFrame {
     private javax.swing.JTextField create_id_paramedics;
     private javax.swing.JTextField create_name_complex;
     private javax.swing.JTextField create_name_paramedics;
-    private javax.swing.JSpinner create_paramedicas_complex;
     private javax.swing.JButton create_paramedics_acept;
+    private javax.swing.JSpinner create_paramedics_complex;
     private javax.swing.JTextField create_plact_ambulance;
     private javax.swing.JComboBox<String> create_ranking_paramedics;
     private javax.swing.JSpinner create_speed_ambulance;

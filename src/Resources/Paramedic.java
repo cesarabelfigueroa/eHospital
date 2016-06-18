@@ -7,25 +7,25 @@ public class Paramedic implements Serializable {
     private String name;
     private int age;
     private String id_number;
-    private String ranking;
+    private Ranking ranking;
     private HospitalComplex hospital = new HospitalComplex();
     private boolean active = true;
 
     public Paramedic() {
     }
 
-    public Paramedic(String name, int age, String id_number, String ranking) {
+    public Paramedic(String name, int age, String id_number, Ranking ranking) {
         this.name = name;
         this.age = age;
         this.id_number = id_number;
         this.ranking = ranking;
     }
 
-    public String getRanking() {
+    public Ranking getRanking() {
         return ranking;
     }
 
-    public void setRanking(String ranking) {
+    public void setRanking(Ranking ranking) {
         this.ranking = ranking;
     }
 

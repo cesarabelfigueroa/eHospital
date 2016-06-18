@@ -1,21 +1,25 @@
 package Resources;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
-public class HospitalComplex implements Serializable{
+
+
+
+public class HospitalComplex implements Serializable {
 
     private String name;
     private String address;
     private int paramedics;
     private int ambulances;
-    private String ranking;
-    
-    
- 
+    private Ranking ranking;
+    private ArrayList<Paramedic> medics = new ArrayList();
+    private ArrayList<Ambulance> ambulancesObjects = new ArrayList();
+
     public HospitalComplex() {
     }
 
-    public HospitalComplex(String name, String address, int paramedics, int ambulances, String ranking) {
+    public HospitalComplex(String name, String address, int paramedics, int ambulances, Ranking ranking) {
         this.name = name;
         this.address = address;
         this.paramedics = paramedics;
@@ -55,12 +59,28 @@ public class HospitalComplex implements Serializable{
         this.ambulances = ambulances;
     }
 
-    public String getRanking() {
+    public Ranking getRanking() {
         return ranking;
     }
 
-    public void setRanking(String ranking) {
+    public void setRanking(Ranking ranking) {
         this.ranking = ranking;
+    }
+
+    public ArrayList<Paramedic> getMedics() {
+        return medics;
+    }
+
+    public void setMedics(ArrayList<Paramedic> medics) {
+        this.medics = medics;
+    }
+
+    public ArrayList<Ambulance> getAmbulancesObjects() {
+        return ambulancesObjects;
+    }
+
+    public void setAmbulancesObjects(ArrayList<Ambulance> ambulancesObjects) {
+        this.ambulancesObjects = ambulancesObjects;
     }
 
     @Override
