@@ -24,10 +24,10 @@ public class ModelService {
                 oos.close();
                 fos.close();
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+
             }
         } catch (Exception ex) {
-            System.out.println(ex.getMessage());
+
         }
     }
 
@@ -46,12 +46,11 @@ public class ModelService {
                     oos.close();
                     fos.close();
                 } catch (Exception ex) {
-                
                     return null;
                 }
                 return bnt;
             } catch (IOException | ClassNotFoundException e) {
-                System.out.println(e);
+
                 return null;
             }
         } catch (Exception ex) {

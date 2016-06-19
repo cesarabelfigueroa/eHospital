@@ -877,18 +877,24 @@ public class eHospital extends javax.swing.JFrame {
                     break;
             }
         }
-        create_name_complex.setText("");
-        create_direction_complex.setText("");
-        JOptionPane.showMessageDialog(null, "Acción realizada con éxito.");
-        HospitalComplex hospital = new HospitalComplex(name, adress, paramedics, ambulances, ranking);
-        app.addHospital(hospital);
-        renderList(reassing_paramedic_paramedic, app.getAllParamedics());
-        renderList(reassing_center_paramedics, app.getHospitals());
-        renderList(reassing_ambulance_ambulance, app.getAllAmbulances());
-        renderList(reassing_center_paramedics, app.getHospitals());
-        md.writeFiles(app);
-        DefaultTableModel model = (DefaultTableModel) table_complex.getModel();
-        renderTable(model, app.getHospitals());
+
+        if (app.isValidHospital(name) && !name.isEmpty()) {
+            HospitalComplex hospital = new HospitalComplex(name, adress, paramedics, ambulances, ranking);
+            app.addHospital(hospital);
+            create_name_complex.setText("");
+            create_direction_complex.setText("");
+            JOptionPane.showMessageDialog(null, "Acción realizada con éxito.");
+            renderList(reassing_paramedic_paramedic, app.getAllParamedics());
+            renderList(reassing_center_paramedics, app.getHospitals());
+            renderList(reassing_ambulance_ambulance, app.getAllAmbulances());
+            renderList(reassing_center_paramedics, app.getHospitals());
+            md.writeFiles(app);
+            DefaultTableModel model = (DefaultTableModel) table_complex.getModel();
+            renderTable(model, app.getHospitals());
+        } else {
+            JOptionPane.showMessageDialog(null, "Un error ha ocurrido.");
+
+        }
     }//GEN-LAST:event_create_complex_aceptActionPerformed
 
     private void create_ambulance_aceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_create_ambulance_aceptActionPerformed
@@ -896,7 +902,7 @@ public class eHospital extends javax.swing.JFrame {
         int year = Integer.parseInt(create_date_ambulance.getValue().toString());
         double speed = Double.parseDouble(create_speed_ambulance.getValue().toString());
         HospitalComplex hospital = (HospitalComplex) create_center_ambulance.getModel().getSelectedItem();
-        if (hospital != null) {
+        if (hospital != null && !plate.isEmpty() && app.isValidAmbulance(plate)) {
             Ambulance ambulance = new Ambulance(plate, year, speed);
             app.addAmbulance(hospital, ambulance);
             md.writeFiles(app);
@@ -907,6 +913,8 @@ public class eHospital extends javax.swing.JFrame {
             renderList(reassing_center_ambulance, app.getHospitals());
             create_plact_ambulance.setText("");
             JOptionPane.showMessageDialog(null, "Acción realizada con éxito.");
+        } else {
+            JOptionPane.showMessageDialog(null, "Un error ha ocurrido.");
         }
     }//GEN-LAST:event_create_ambulance_aceptActionPerformed
 
@@ -965,7 +973,7 @@ public class eHospital extends javax.swing.JFrame {
                     break;
             }
         }
-        if (hospital != null) {
+        if (hospital != null && !id.isEmpty() && app.isValidParamedic(id)) {
             Paramedic param = new Paramedic(name, age, id, ranking);
             create_name_paramedics.setText("");
             create_id_paramedics.setText("");
@@ -977,6 +985,8 @@ public class eHospital extends javax.swing.JFrame {
             renderList(reassing_center_paramedics, app.getHospitals());
             md.writeFiles(app);
             JOptionPane.showMessageDialog(null, "Acción realizada con éxito.");
+        } else {
+            JOptionPane.showMessageDialog(null, "Un error ha ocurrido.");
         }
     }//GEN-LAST:event_create_paramedics_aceptActionPerformed
 

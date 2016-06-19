@@ -120,4 +120,38 @@ public class Application implements Serializable {
             }
         }
     }
+
+    public boolean isValidParamedic(String id) {
+        ArrayList<Paramedic> paramedics = getAllParamedics();
+        for (int i = 0; i < paramedics.size(); i++) {
+            Paramedic iterativeP = paramedics.get(i);
+            if (iterativeP.getId_number().equals(id)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    
+    
+    public boolean isValidAmbulance(String plate) {
+        ArrayList<Ambulance> ambulances = getAllAmbulances();
+        for (int i = 0; i < ambulances.size(); i++) {
+            Ambulance iterativeP = ambulances.get(i);
+            if (iterativeP.getPlateNumber().equals(plate)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+     public boolean isValidHospital(String name) {
+        for (int i = 0; i < hospitals.size(); i++) {
+            HospitalComplex iterativeP = hospitals.get(i);
+            if (iterativeP.getName().equals(name)) {
+                return false;
+            }
+        }
+        return true;
+    }   
 }
