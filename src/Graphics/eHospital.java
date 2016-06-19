@@ -2,10 +2,12 @@ package Graphics;
 
 import Resources.Ambulance;
 import Resources.HospitalComplex;
+import Resources.Location;
 import Resources.Paramedic;
 import Resources.Ranking;
 import Services.Application;
 import Services.ModelService;
+import java.awt.Component;
 import java.awt.Image;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
@@ -18,11 +20,17 @@ import javax.swing.table.DefaultTableModel;
 import org.jvnet.substance.SubstanceLookAndFeel;
 import org.graphstream.graph.*;
 import org.graphstream.graph.implementations.*;
+import org.graphstream.ui.spriteManager.Sprite;
+import org.graphstream.ui.spriteManager.SpriteManager;
+import org.graphstream.ui.swingViewer.*;
+import org.graphstream.ui.view.View;
+import org.graphstream.ui.view.Viewer;
 
 public class eHospital extends javax.swing.JFrame {
 
     Application app = new Application();
     ModelService md = new ModelService();
+    Graph graph = new MultiGraph("embedded");
 
     public eHospital() {
         Application readAPP = md.readFiles();
@@ -35,6 +43,10 @@ public class eHospital extends javax.swing.JFrame {
         ImageIcon logoImage = new ImageIcon("./src/img/Prince.png");
         Icon logoIcon = new ImageIcon(logoImage.getImage().getScaledInstance(logoSpace.getWidth(), logoSpace.getHeight(), Image.SCALE_DEFAULT));
         logoSpace.setIcon(logoIcon);
+        Viewer viewer = graph.display(true);
+        View view = viewer.getDefaultView();
+
+        main_body_graph.add((Component) view);
 
         this.repaint();
     }
@@ -156,26 +168,27 @@ public class eHospital extends javax.swing.JFrame {
         table_complex = new javax.swing.JTable();
         delete_table_complex = new javax.swing.JButton();
         window_map_graph = new javax.swing.JDialog();
-        body_menu_graph = new javax.swing.JPanel();
-        jLabel19 = new javax.swing.JLabel();
-        jLabel20 = new javax.swing.JLabel();
-        center_list_graph = new javax.swing.JComboBox<>();
-        jLabel21 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jLabel22 = new javax.swing.JLabel();
-        center_list_graph1 = new javax.swing.JComboBox<>();
-        center_list_graph2 = new javax.swing.JComboBox<>();
-        jButton2 = new javax.swing.JButton();
-        jLabel23 = new javax.swing.JLabel();
-        center_list_graph3 = new javax.swing.JComboBox<>();
-        center_list_graph4 = new javax.swing.JComboBox<>();
-        jButton3 = new javax.swing.JButton();
-        jLabel24 = new javax.swing.JLabel();
-        center_list_graph5 = new javax.swing.JComboBox<>();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
         main_body_graph = new javax.swing.JPanel();
+        body_menu_graph1 = new javax.swing.JPanel();
+        jLabel25 = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
+        center_list_graph = new javax.swing.JComboBox<>();
+        jLabel27 = new javax.swing.JLabel();
+        localization_name_map = new javax.swing.JTextField();
+        jLabel28 = new javax.swing.JLabel();
+        node_init_end = new javax.swing.JComboBox<>();
+        center_list_graph8 = new javax.swing.JComboBox<>();
+        jButton7 = new javax.swing.JButton();
+        jLabel29 = new javax.swing.JLabel();
+        node_init_graph = new javax.swing.JComboBox<>();
+        emergency_center_list = new javax.swing.JComboBox<>();
+        jButton8 = new javax.swing.JButton();
+        jLabel30 = new javax.swing.JLabel();
+        emergency_depach_list = new javax.swing.JComboBox<>();
+        jButton9 = new javax.swing.JButton();
+        distance_km_map = new javax.swing.JTextField();
+        jButton6 = new javax.swing.JButton();
+        jButton11 = new javax.swing.JButton();
         show_admin_ambulance = new javax.swing.JButton();
         show_admin_hospital = new javax.swing.JButton();
         show_admin_paramedics = new javax.swing.JButton();
@@ -768,139 +781,6 @@ public class eHospital extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jLabel19.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel19.setText("Ubicaciones");
-
-        jLabel20.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel20.setText("Centros Hospitalarios");
-
-        center_list_graph.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-
-        jLabel21.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel21.setText("Localizaciones");
-
-        jButton1.setText("Agregar");
-
-        jLabel22.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel22.setText("Emergencias");
-
-        center_list_graph1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-
-        center_list_graph2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        center_list_graph2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "A", "B", "C", "D" }));
-
-        jButton2.setText("Agregar");
-
-        jLabel23.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel23.setText("Conexiones");
-
-        center_list_graph3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-
-        center_list_graph4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-
-        jButton3.setText("Agregar");
-
-        jLabel24.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel24.setText("Despacho de Emergencias");
-
-        center_list_graph5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-
-        jButton4.setText("Ejecutar");
-
-        jButton5.setText("Exportar");
-
-        javax.swing.GroupLayout body_menu_graphLayout = new javax.swing.GroupLayout(body_menu_graph);
-        body_menu_graph.setLayout(body_menu_graphLayout);
-        body_menu_graphLayout.setHorizontalGroup(
-            body_menu_graphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(body_menu_graphLayout.createSequentialGroup()
-                .addGroup(body_menu_graphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(body_menu_graphLayout.createSequentialGroup()
-                        .addContainerGap(20, Short.MAX_VALUE)
-                        .addGroup(body_menu_graphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, body_menu_graphLayout.createSequentialGroup()
-                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(86, 86, 86))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, body_menu_graphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(body_menu_graphLayout.createSequentialGroup()
-                                    .addComponent(center_list_graph4, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(31, 31, 31)
-                                    .addComponent(center_list_graph2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, body_menu_graphLayout.createSequentialGroup()
-                                    .addComponent(center_list_graph3, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(center_list_graph1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(body_menu_graphLayout.createSequentialGroup()
-                                    .addGroup(body_menu_graphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel20)
-                                        .addComponent(center_list_graph, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGap(26, 26, 26)
-                                    .addGroup(body_menu_graphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel21)
-                                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, body_menu_graphLayout.createSequentialGroup()
-                                .addComponent(center_list_graph5, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(54, 54, 54)
-                                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(body_menu_graphLayout.createSequentialGroup()
-                        .addGap(107, 107, 107)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(25, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, body_menu_graphLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(112, 112, 112))
-            .addGroup(body_menu_graphLayout.createSequentialGroup()
-                .addGap(113, 113, 113)
-                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        body_menu_graphLayout.setVerticalGroup(
-            body_menu_graphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(body_menu_graphLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(body_menu_graphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel20)
-                    .addComponent(jLabel21))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(body_menu_graphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTextField1)
-                    .addComponent(center_list_graph, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(16, 16, 16)
-                .addGroup(body_menu_graphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(center_list_graph1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(center_list_graph3, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(9, 9, 9)
-                .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(body_menu_graphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(center_list_graph2, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(center_list_graph4, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(body_menu_graphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
-                    .addComponent(center_list_graph5))
-                .addGap(26, 26, 26)
-                .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
-                .addGap(78, 78, 78))
-        );
-
         javax.swing.GroupLayout main_body_graphLayout = new javax.swing.GroupLayout(main_body_graph);
         main_body_graph.setLayout(main_body_graphLayout);
         main_body_graphLayout.setHorizontalGroup(
@@ -909,28 +789,183 @@ public class eHospital extends javax.swing.JFrame {
         );
         main_body_graphLayout.setVerticalGroup(
             main_body_graphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 763, Short.MAX_VALUE)
+        );
+
+        jLabel25.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel25.setText("Ubicaciones");
+
+        jLabel26.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel26.setText("Centros Hospitalarios");
+
+        center_list_graph.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+
+        jLabel27.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel27.setText("Localizaciones");
+
+        jLabel28.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel28.setText("Emergencias");
+
+        node_init_end.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+
+        center_list_graph8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        center_list_graph8.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "A", "B", "C", "D" }));
+
+        jButton7.setText("Agregar");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
+        jLabel29.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel29.setText("Conexiones");
+
+        node_init_graph.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+
+        emergency_center_list.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+
+        jButton8.setText("Agregar");
+
+        jLabel30.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel30.setText("Despacho de Emergencias");
+
+        emergency_depach_list.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+
+        jButton9.setText("Ejecutar");
+
+        jButton6.setText("Agregar");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+
+        jButton11.setText("Agregar");
+        jButton11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton11ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout body_menu_graph1Layout = new javax.swing.GroupLayout(body_menu_graph1);
+        body_menu_graph1.setLayout(body_menu_graph1Layout);
+        body_menu_graph1Layout.setHorizontalGroup(
+            body_menu_graph1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(body_menu_graph1Layout.createSequentialGroup()
+                .addGroup(body_menu_graph1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, body_menu_graph1Layout.createSequentialGroup()
+                        .addContainerGap(20, Short.MAX_VALUE)
+                        .addGroup(body_menu_graph1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel26)
+                            .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel27)
+                            .addGroup(body_menu_graph1Layout.createSequentialGroup()
+                                .addComponent(center_list_graph, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(29, 29, 29))
+                    .addGroup(body_menu_graph1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(body_menu_graph1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(body_menu_graph1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, body_menu_graph1Layout.createSequentialGroup()
+                                    .addComponent(node_init_graph, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(node_init_end, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(body_menu_graph1Layout.createSequentialGroup()
+                                    .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(173, 173, 173)))
+                            .addGroup(body_menu_graph1Layout.createSequentialGroup()
+                                .addComponent(localization_name_map, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(body_menu_graph1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(body_menu_graph1Layout.createSequentialGroup()
+                                    .addComponent(emergency_center_list, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(center_list_graph8, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jLabel28, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, body_menu_graph1Layout.createSequentialGroup()
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(73, 73, 73)))
+                            .addGroup(body_menu_graph1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, body_menu_graph1Layout.createSequentialGroup()
+                                    .addComponent(emergency_depach_list, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(36, 36, 36)
+                                    .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(25, Short.MAX_VALUE))
+            .addGroup(body_menu_graph1Layout.createSequentialGroup()
+                .addGap(97, 97, 97)
+                .addGroup(body_menu_graph1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(distance_km_map)
+                    .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        body_menu_graph1Layout.setVerticalGroup(
+            body_menu_graph1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(body_menu_graph1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel26)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(body_menu_graph1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(center_list_graph, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel27)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(body_menu_graph1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(localization_name_map, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(body_menu_graph1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(node_init_end, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(node_init_graph, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(distance_km_map, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(13, 13, 13)
+                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel28, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(body_menu_graph1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(center_list_graph8, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(emergency_center_list, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(body_menu_graph1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(emergency_depach_list, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(68, 68, 68))
         );
 
         javax.swing.GroupLayout window_map_graphLayout = new javax.swing.GroupLayout(window_map_graph.getContentPane());
         window_map_graph.getContentPane().setLayout(window_map_graphLayout);
         window_map_graphLayout.setHorizontalGroup(
             window_map_graphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, window_map_graphLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(window_map_graphLayout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(main_body_graph, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(body_menu_graph, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(body_menu_graph1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         window_map_graphLayout.setVerticalGroup(
             window_map_graphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, window_map_graphLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(window_map_graphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(window_map_graphLayout.createSequentialGroup()
-                        .addComponent(main_body_graph, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addComponent(body_menu_graph, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(body_menu_graph1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(main_body_graph, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -1235,11 +1270,61 @@ public class eHospital extends javax.swing.JFrame {
     private void show_admin_mapsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_show_admin_mapsActionPerformed
         if (app.getHospitals().size() > 0) {
             renderList(center_list_graph, app.getHospitals());
+            renderList(emergency_center_list, app.getCenters());
+            renderList(emergency_depach_list, app.getCenters());
             showDialog(window_map_graph);
         } else {
             JOptionPane.showMessageDialog(null, "No hay centros hospitalarios disponibles.");
         }
     }//GEN-LAST:event_show_admin_mapsActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        DefaultComboBoxModel cbmodel = (DefaultComboBoxModel) center_list_graph.getModel();
+        HospitalComplex element = (HospitalComplex) cbmodel.getSelectedItem();
+        if (app.getPoints().indexOf(element) == -1) {
+            Node n = graph.addNode(element.toString());
+            n.addAttribute("ui.label", element.toString());
+            app.getPoints().add(element);
+            renderList(node_init_graph, app.getPoints());
+            renderList(node_init_end, app.getPoints());
+        } else {
+            JOptionPane.showMessageDialog(null, "Un error ha ocurrido");
+        }
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
+        String element = localization_name_map.getText();
+        if (app.getPointsNames().indexOf(element) == -1 && !element.isEmpty()) {
+            Location local = new Location(element);
+            Node n2 = graph.addNode(local.toString());
+            n2.addAttribute("ui.label", local.toString());
+            app.getPoints().add(local);
+            app.getPointsNames().add(element);
+            localization_name_map.setText("");
+            renderList(node_init_graph, app.getPoints());
+            renderList(node_init_end, app.getPoints());
+            renderList(emergency_center_list, app.getCenters());
+            renderList(emergency_depach_list, app.getCenters());
+        } else {
+            JOptionPane.showMessageDialog(null, "Un error ha ocurrido");
+        }
+    }//GEN-LAST:event_jButton11ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        DefaultComboBoxModel cbmodel = (DefaultComboBoxModel) node_init_graph.getModel();
+        DefaultComboBoxModel cbmodel2 = (DefaultComboBoxModel) node_init_end.getModel();
+        Object init = cbmodel.getSelectedItem();
+        Object end = cbmodel2.getSelectedItem();
+        String distance = distance_km_map.getText();
+        if (!init.equals(end) && app.getEdgesNames().indexOf(init.toString() + "-" + end.toString()) == -1 && app.getEdgesNames().indexOf(end.toString() + "-" + init.toString()) == -1) {
+            Edge edge = graph.addEdge(init.toString() + "-" + end.toString(), init.toString(), end.toString());
+            edge.addAttribute("ui.label", distance+ " km");
+            app.getEdgesNames().add(init.toString() + "-" + end.toString());
+            distance_km_map.setText("");
+        } else {
+            JOptionPane.showMessageDialog(null, "Un error ha ocurrido");
+        }
+    }//GEN-LAST:event_jButton7ActionPerformed
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -1251,13 +1336,9 @@ public class eHospital extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel body_menu_graph;
+    private javax.swing.JPanel body_menu_graph1;
     private javax.swing.JComboBox<String> center_list_graph;
-    private javax.swing.JComboBox<String> center_list_graph1;
-    private javax.swing.JComboBox<String> center_list_graph2;
-    private javax.swing.JComboBox<String> center_list_graph3;
-    private javax.swing.JComboBox<String> center_list_graph4;
-    private javax.swing.JComboBox<String> center_list_graph5;
+    private javax.swing.JComboBox<String> center_list_graph8;
     private javax.swing.JSpinner create_age_paramedics;
     private javax.swing.JButton create_ambulance_acept;
     private javax.swing.JSpinner create_ambulance_complex;
@@ -1278,11 +1359,14 @@ public class eHospital extends javax.swing.JFrame {
     private javax.swing.JButton delete_table_ambulance;
     private javax.swing.JButton delete_table_complex;
     private javax.swing.JButton delete_table_paramedics;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
+    private javax.swing.JTextField distance_km_map;
+    private javax.swing.JComboBox<String> emergency_center_list;
+    private javax.swing.JComboBox<String> emergency_depach_list;
+    private javax.swing.JButton jButton11;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1293,14 +1377,14 @@ public class eHospital extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
-    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -1321,9 +1405,11 @@ public class eHospital extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JTabbedPane jTabbedPane3;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField localization_name_map;
     private javax.swing.JLabel logoSpace;
     private javax.swing.JPanel main_body_graph;
+    private javax.swing.JComboBox<String> node_init_end;
+    private javax.swing.JComboBox<String> node_init_graph;
     private javax.swing.JButton reassing_ambulance_acept;
     private javax.swing.JComboBox<String> reassing_ambulance_ambulance;
     private javax.swing.JComboBox<String> reassing_center_ambulance;

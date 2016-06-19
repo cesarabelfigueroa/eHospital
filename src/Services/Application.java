@@ -2,6 +2,7 @@ package Services;
 
 import Resources.Ambulance;
 import Resources.HospitalComplex;
+import Resources.Location;
 import Resources.Paramedic;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -9,6 +10,9 @@ import java.util.ArrayList;
 public class Application implements Serializable {
 
     private ArrayList<HospitalComplex> hospitals = new ArrayList();
+    private ArrayList Points = new ArrayList();
+    private ArrayList PointsNames = new ArrayList();
+    private ArrayList EdgesNames = new ArrayList();
 
     public Application() {
 
@@ -132,8 +136,7 @@ public class Application implements Serializable {
 
         return true;
     }
-    
-    
+
     public boolean isValidAmbulance(String plate) {
         ArrayList<Ambulance> ambulances = getAllAmbulances();
         for (int i = 0; i < ambulances.size(); i++) {
@@ -144,8 +147,8 @@ public class Application implements Serializable {
         }
         return true;
     }
-    
-     public boolean isValidHospital(String name) {
+
+    public boolean isValidHospital(String name) {
         for (int i = 0; i < hospitals.size(); i++) {
             HospitalComplex iterativeP = hospitals.get(i);
             if (iterativeP.getName().equals(name)) {
@@ -153,5 +156,40 @@ public class Application implements Serializable {
             }
         }
         return true;
-    }   
+    }
+
+    public ArrayList getCenters() {
+        ArrayList elements = new ArrayList();
+        for (int i = 0; i < Points.size(); i++) {
+            if (Points.get(i) instanceof Location) {
+                elements.add(Points.get(i));
+            }
+        }
+        return elements;
+    }
+
+    public ArrayList getPointsNames() {
+        return PointsNames;
+    }
+
+    public void setPointsNames(ArrayList PointsNames) {
+        this.PointsNames = PointsNames;
+    }
+
+    public ArrayList getPoints() {
+        return Points;
+    }
+
+    public void setPoints(ArrayList Points) {
+        this.Points = Points;
+    }
+
+    public ArrayList getEdgesNames() {
+        return EdgesNames;
+    }
+
+    public void setEdgesNames(ArrayList EdgesNames) {
+        this.EdgesNames = EdgesNames;
+    }
+
 }
