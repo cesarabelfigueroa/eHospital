@@ -1126,7 +1126,7 @@
                                       <Group type="102" alignment="0" attributes="0">
                                           <Component id="emergency_center_list" min="-2" pref="141" max="-2" attributes="0"/>
                                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                                          <Component id="center_list_graph8" min="-2" pref="143" max="-2" attributes="0"/>
+                                          <Component id="emergency_rank_element" min="-2" pref="143" max="-2" attributes="0"/>
                                       </Group>
                                       <Component id="jLabel28" alignment="0" min="-2" pref="91" max="-2" attributes="0"/>
                                       <Group type="102" alignment="1" attributes="0">
@@ -1192,7 +1192,7 @@
                       <Component id="jLabel28" min="-2" pref="47" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="center_list_graph8" alignment="3" min="-2" pref="41" max="-2" attributes="0"/>
+                          <Component id="emergency_rank_element" alignment="3" min="-2" pref="41" max="-2" attributes="0"/>
                           <Component id="emergency_center_list" alignment="3" min="-2" pref="41" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -1270,7 +1270,7 @@
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>
             </Component>
-            <Component class="javax.swing.JComboBox" name="center_list_graph8">
+            <Component class="javax.swing.JComboBox" name="emergency_rank_element">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Tahoma" size="12" style="1"/>
@@ -1334,6 +1334,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Agregar"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton8ActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel30">
               <Properties>
@@ -1360,6 +1363,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Ejecutar"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton9ActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="distance_km_map">
             </Component>

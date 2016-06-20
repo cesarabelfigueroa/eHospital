@@ -4,6 +4,7 @@ import Resources.Ambulance;
 import Resources.HospitalComplex;
 import Resources.Location;
 import Resources.Paramedic;
+import Resources.Route;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -13,6 +14,7 @@ public class Application implements Serializable {
     private ArrayList Points = new ArrayList();
     private ArrayList PointsNames = new ArrayList();
     private ArrayList EdgesNames = new ArrayList();
+    private ArrayList<Route> Routes = new ArrayList();
 
     public Application() {
 
@@ -192,4 +194,11 @@ public class Application implements Serializable {
         this.EdgesNames = EdgesNames;
     }
 
+    public ArrayList getRoutes() {
+        return Routes;
+    }
+
+    public void setRoutes(ArrayList Routes) {
+        this.Routes = Routes;
+    }
 }

@@ -1,10 +1,12 @@
 package Resources;
 
-import java.util.ArrayList;
+import java.io.Serializable;
+import java.util.ArrayDeque;
 
-public class Location {
+public class Location implements Serializable {
+
     private String name;
-    private ArrayList<Emergency> emergencys = new ArrayList();
+    private ArrayDeque emergencys = new ArrayDeque();
 
     public Location(String name) {
         this.name = name;
@@ -18,16 +20,16 @@ public class Location {
         this.name = name;
     }
 
-    public ArrayList<Emergency> getEmergencys() {
+    public ArrayDeque getEmergencys() {
         return emergencys;
     }
 
-    public void setEmergencys(ArrayList<Emergency> emergencys) {
+    public void setEmergencys(ArrayDeque emergencys) {
         this.emergencys = emergencys;
     }
 
     @Override
     public String toString() {
-        return name ;
+        return name;
     }
 }

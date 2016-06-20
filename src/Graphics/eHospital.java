@@ -1,10 +1,12 @@
 package Graphics;
 
 import Resources.Ambulance;
+import Resources.Emergency;
 import Resources.HospitalComplex;
 import Resources.Location;
 import Resources.Paramedic;
 import Resources.Ranking;
+import Resources.Route;
 import Services.Application;
 import Services.ModelService;
 import java.awt.Component;
@@ -17,6 +19,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import org.graphstream.algorithm.Dijkstra;
 import org.jvnet.substance.SubstanceLookAndFeel;
 import org.graphstream.graph.*;
 import org.graphstream.graph.implementations.*;
@@ -45,9 +48,8 @@ public class eHospital extends javax.swing.JFrame {
         logoSpace.setIcon(logoIcon);
         Viewer viewer = graph.display(true);
         View view = viewer.getDefaultView();
-
         main_body_graph.add((Component) view);
-
+        renderGraph();
         this.repaint();
     }
 
@@ -177,7 +179,7 @@ public class eHospital extends javax.swing.JFrame {
         localization_name_map = new javax.swing.JTextField();
         jLabel28 = new javax.swing.JLabel();
         node_init_end = new javax.swing.JComboBox<>();
-        center_list_graph8 = new javax.swing.JComboBox<>();
+        emergency_rank_element = new javax.swing.JComboBox<>();
         jButton7 = new javax.swing.JButton();
         jLabel29 = new javax.swing.JLabel();
         node_init_graph = new javax.swing.JComboBox<>();
@@ -808,8 +810,8 @@ public class eHospital extends javax.swing.JFrame {
 
         node_init_end.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
-        center_list_graph8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        center_list_graph8.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "A", "B", "C", "D" }));
+        emergency_rank_element.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        emergency_rank_element.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "A", "B", "C", "D" }));
 
         jButton7.setText("Agregar");
         jButton7.addActionListener(new java.awt.event.ActionListener() {
@@ -826,6 +828,11 @@ public class eHospital extends javax.swing.JFrame {
         emergency_center_list.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
         jButton8.setText("Agregar");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
 
         jLabel30.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel30.setText("Despacho de Emergencias");
@@ -833,6 +840,11 @@ public class eHospital extends javax.swing.JFrame {
         emergency_depach_list.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
         jButton9.setText("Ejecutar");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
 
         jButton6.setText("Agregar");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
@@ -884,7 +896,7 @@ public class eHospital extends javax.swing.JFrame {
                                 .addGroup(body_menu_graph1Layout.createSequentialGroup()
                                     .addComponent(emergency_center_list, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGap(18, 18, 18)
-                                    .addComponent(center_list_graph8, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(emergency_rank_element, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addComponent(jLabel28, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, body_menu_graph1Layout.createSequentialGroup()
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -935,7 +947,7 @@ public class eHospital extends javax.swing.JFrame {
                 .addComponent(jLabel28, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(body_menu_graph1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(center_list_graph8, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(emergency_rank_element, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(emergency_center_list, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1121,7 +1133,6 @@ public class eHospital extends javax.swing.JFrame {
             renderTable(model, app.getHospitals());
         } else {
             JOptionPane.showMessageDialog(null, "Un error ha ocurrido.");
-
         }
     }//GEN-LAST:event_create_complex_aceptActionPerformed
 
@@ -1272,6 +1283,10 @@ public class eHospital extends javax.swing.JFrame {
             renderList(center_list_graph, app.getHospitals());
             renderList(emergency_center_list, app.getCenters());
             renderList(emergency_depach_list, app.getCenters());
+            renderList(node_init_graph, app.getPoints());
+            renderList(node_init_end, app.getPoints());
+            renderList(emergency_center_list, app.getCenters());
+            renderList(emergency_depach_list, app.getCenters());
             showDialog(window_map_graph);
         } else {
             JOptionPane.showMessageDialog(null, "No hay centros hospitalarios disponibles.");
@@ -1287,8 +1302,9 @@ public class eHospital extends javax.swing.JFrame {
             app.getPoints().add(element);
             renderList(node_init_graph, app.getPoints());
             renderList(node_init_end, app.getPoints());
+            md.writeFiles(app);
         } else {
-            JOptionPane.showMessageDialog(null, "Un error ha ocurrido");
+            JOptionPane.showMessageDialog(null, "Un error ha ocurrido.");
         }
     }//GEN-LAST:event_jButton6ActionPerformed
 
@@ -1305,8 +1321,9 @@ public class eHospital extends javax.swing.JFrame {
             renderList(node_init_end, app.getPoints());
             renderList(emergency_center_list, app.getCenters());
             renderList(emergency_depach_list, app.getCenters());
+            md.writeFiles(app);
         } else {
-            JOptionPane.showMessageDialog(null, "Un error ha ocurrido");
+            JOptionPane.showMessageDialog(null, "Un error ha ocurrido.");
         }
     }//GEN-LAST:event_jButton11ActionPerformed
 
@@ -1315,16 +1332,85 @@ public class eHospital extends javax.swing.JFrame {
         DefaultComboBoxModel cbmodel2 = (DefaultComboBoxModel) node_init_end.getModel();
         Object init = cbmodel.getSelectedItem();
         Object end = cbmodel2.getSelectedItem();
-        String distance = distance_km_map.getText();
-        if (!init.equals(end) && app.getEdgesNames().indexOf(init.toString() + "-" + end.toString()) == -1 && app.getEdgesNames().indexOf(end.toString() + "-" + init.toString()) == -1) {
-            Edge edge = graph.addEdge(init.toString() + "-" + end.toString(), init.toString(), end.toString());
-            edge.addAttribute("ui.label", distance+ " km");
-            app.getEdgesNames().add(init.toString() + "-" + end.toString());
-            distance_km_map.setText("");
-        } else {
-            JOptionPane.showMessageDialog(null, "Un error ha ocurrido");
+        try {
+            String distance = distance_km_map.getText();
+            double db = Double.parseDouble(distance);
+            if (!distance.isEmpty()) {
+                if (!init.equals(end) && app.getEdgesNames().indexOf(init.toString() + "-" + end.toString()) == -1 && app.getEdgesNames().indexOf(end.toString() + "-" + init.toString()) == -1) {
+                    Edge edge = graph.addEdge(init.toString() + "-" + end.toString(), init.toString(), end.toString());
+                    edge.addAttribute("ui.label", distance + " km");
+                    edge.setAttribute("length", Integer.parseInt(distance));
+                    app.getEdgesNames().add(init.toString() + "-" + end.toString());
+                    app.getRoutes().add(new Route(init, end, Double.parseDouble(distance)));
+                    distance_km_map.setText("");
+                    md.writeFiles(app);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Un error ha ocurrido.");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Un error ha ocurrido.");
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Un error ha ocurrido.");
         }
     }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        DefaultComboBoxModel cbmodel = (DefaultComboBoxModel) emergency_center_list.getModel();
+        String rank = emergency_rank_element.getModel().toString();
+        Location element = (Location) cbmodel.getSelectedItem();
+        Ranking ranking = new Ranking();
+        switch (rank) {
+            case "A":
+                ranking = new Ranking("A", 4);
+                break;
+            case "B":
+                ranking = new Ranking("B", 3);
+                break;
+            case "C":
+                ranking = new Ranking("C", 2);
+                break;
+            case "D":
+                ranking = new Ranking("D", 1);
+                break;
+            default:
+                break;
+        }
+        element.getEmergencys().addLast(new Emergency(ranking));
+    }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        Dijkstra dijkstra = new Dijkstra(Dijkstra.Element.EDGE, null, "length");
+        dijkstra.init(graph);
+        dijkstra.setSource(graph.getNode("H"));
+        dijkstra.compute();
+        ArrayList text = new ArrayList();
+        for (Node node : dijkstra.getPathNodes(graph.getNode("C"))) {
+            text.add(0, node);
+        }
+
+        for (int i = 0; i < text.size(); i++) {
+            System.out.println(((Node) text.get(i)).getId());
+        }
+
+        dijkstra.clear();
+    }//GEN-LAST:event_jButton9ActionPerformed
+
+    public void renderGraph() {
+        ArrayList points = app.getPoints();
+        ArrayList<Route> ed = app.getRoutes();
+        for (int i = 0; i < points.size(); i++) {
+            Node a = graph.addNode(points.get(i).toString());
+            a.addAttribute("ui.label", points.get(i).toString());
+        }
+
+        for (int i = 0; i < ed.size(); i++) {
+            Route act = ed.get(i);
+            Edge e = graph.addEdge(act.getInit().toString() + "-" + act.getEnd().toString(), act.getInit().toString(), act.getEnd().toString());
+            e.addAttribute("ui.label", act.getDistance() + " km");
+            e.setAttribute("length", (int) act.getDistance());
+        }
+    }
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -1338,7 +1424,6 @@ public class eHospital extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel body_menu_graph1;
     private javax.swing.JComboBox<String> center_list_graph;
-    private javax.swing.JComboBox<String> center_list_graph8;
     private javax.swing.JSpinner create_age_paramedics;
     private javax.swing.JButton create_ambulance_acept;
     private javax.swing.JSpinner create_ambulance_complex;
@@ -1362,6 +1447,7 @@ public class eHospital extends javax.swing.JFrame {
     private javax.swing.JTextField distance_km_map;
     private javax.swing.JComboBox<String> emergency_center_list;
     private javax.swing.JComboBox<String> emergency_depach_list;
+    private javax.swing.JComboBox<String> emergency_rank_element;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;

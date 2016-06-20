@@ -1,6 +1,9 @@
 package Resources;
 
-public class Emergency {
+import java.io.Serializable;
+
+
+public class Emergency  implements Serializable{
     private Ranking ranking;
 
     public Emergency(Ranking ranking) {
