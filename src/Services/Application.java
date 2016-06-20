@@ -201,4 +201,15 @@ public class Application implements Serializable {
     public void setRoutes(ArrayList Routes) {
         this.Routes = Routes;
     }
+
+    public ArrayList getHospitalsPoints() {
+        ArrayList<HospitalComplex> result = new ArrayList();
+        for (int i = 0; i < Points.size(); i++) {
+            if (Points.get(i) instanceof HospitalComplex) {
+                result.add((HospitalComplex) Points.get(i));
+            }
+        }
+
+        return result;
+    }
 }

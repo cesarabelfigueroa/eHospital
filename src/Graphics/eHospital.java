@@ -1143,15 +1143,19 @@ public class eHospital extends javax.swing.JFrame {
         HospitalComplex hospital = (HospitalComplex) create_center_ambulance.getModel().getSelectedItem();
         if (hospital != null && !plate.isEmpty() && app.isValidAmbulance(plate)) {
             Ambulance ambulance = new Ambulance(plate, year, speed);
-            app.addAmbulance(hospital, ambulance);
-            md.writeFiles(app);
-            DefaultTableModel tableModel = (DefaultTableModel) table_ambulance.getModel();
-            ArrayList ambulances = app.getAllAmbulances();
-            renderTable(tableModel, ambulances);
-            renderList(reassing_ambulance_ambulance, app.getAllAmbulances());
-            renderList(reassing_center_ambulance, app.getHospitals());
-            create_plact_ambulance.setText("");
-            JOptionPane.showMessageDialog(null, "Acción realizada con éxito.");
+            if (hospital.getAmbulances() > hospital.getAmbulancesObjects().size()) {
+                app.addAmbulance(hospital, ambulance);
+                md.writeFiles(app);
+                DefaultTableModel tableModel = (DefaultTableModel) table_ambulance.getModel();
+                ArrayList ambulances = app.getAllAmbulances();
+                renderTable(tableModel, ambulances);
+                renderList(reassing_ambulance_ambulance, app.getAllAmbulances());
+                renderList(reassing_center_ambulance, app.getHospitals());
+                create_plact_ambulance.setText("");
+                JOptionPane.showMessageDialog(null, "Acción realizada con éxito.");
+            } else {
+                JOptionPane.showMessageDialog(null, "Lo siento, el numero de ambulancias permitidas, esta excedido.");
+            }
         } else {
             JOptionPane.showMessageDialog(null, "Un error ha ocurrido.");
         }
@@ -1213,17 +1217,21 @@ public class eHospital extends javax.swing.JFrame {
             }
         }
         if (hospital != null && !id.isEmpty() && app.isValidParamedic(id)) {
-            Paramedic param = new Paramedic(name, age, id, ranking);
-            create_name_paramedics.setText("");
-            create_id_paramedics.setText("");
-            app.addParamedic(hospital, param);
-            DefaultTableModel tableModel = (DefaultTableModel) table_paramedics.getModel();
-            ArrayList paramedics = app.getAllParamedics();
-            renderTable(tableModel, paramedics);
-            renderList(reassing_paramedic_paramedic, app.getAllParamedics());
-            renderList(reassing_center_paramedics, app.getHospitals());
-            md.writeFiles(app);
-            JOptionPane.showMessageDialog(null, "Acción realizada con éxito.");
+            if (hospital.getParamedics() > hospital.getMedics().size()) {
+                Paramedic param = new Paramedic(name, age, id, ranking);
+                create_name_paramedics.setText("");
+                create_id_paramedics.setText("");
+                app.addParamedic(hospital, param);
+                DefaultTableModel tableModel = (DefaultTableModel) table_paramedics.getModel();
+                ArrayList paramedics = app.getAllParamedics();
+                renderTable(tableModel, paramedics);
+                renderList(reassing_paramedic_paramedic, app.getAllParamedics());
+                renderList(reassing_center_paramedics, app.getHospitals());
+                md.writeFiles(app);
+                JOptionPane.showMessageDialog(null, "Acción realizada con éxito.");
+            } else {
+                JOptionPane.showMessageDialog(null, "Lo siento, el numero maximo de medicos ha sido excedido.");
+            }
         } else {
             JOptionPane.showMessageDialog(null, "Un error ha ocurrido.");
         }
@@ -1380,21 +1388,86 @@ public class eHospital extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        Dijkstra dijkstra = new Dijkstra(Dijkstra.Element.EDGE, null, "length");
-        dijkstra.init(graph);
-        dijkstra.setSource(graph.getNode("H"));
-        dijkstra.compute();
-        ArrayList text = new ArrayList();
-        for (Node node : dijkstra.getPathNodes(graph.getNode("C"))) {
-            text.add(0, node);
+        Location location = (Location) emergency_depach_list.getModel().getSelectedItem();
+        boolean end = false;
+        if (location.getEmergencys().size() > 0) {
+            ArrayList routes = getRoutes();
+            while (!end || routes.isEmpty()) {
+                int index = calculateIndexPath(getRoutes());
+                String hospital = ((ArrayList) routes.get(index)).get(0).toString();
+                HospitalComplex hc = (HospitalComplex) app.getHospitalsPoints().get(findHospitalByName(hospital));
+                if (hc.getMedics().size() >= 1 && hc.getMedics().size() >= 3 && hc.getRanking().getValue() >= ((Emergency) location.getEmergencys().peekFirst()).getRanking().getValue()) {
+                    System.out.println("encontré");
+                    end = true;
+                } else {
+                    routes.remove(index);
+                }
+            }
+            if (!end) {
+                JOptionPane.showMessageDialog(null, "No hay ningun centro que pueda atender su solicitud.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "La localización no tiene ninguna emergencia.");
         }
-
-        for (int i = 0; i < text.size(); i++) {
-            System.out.println(((Node) text.get(i)).getId());
-        }
-
-        dijkstra.clear();
     }//GEN-LAST:event_jButton9ActionPerformed
+
+    private int findHospitalByName(String name) {
+        ArrayList<HospitalComplex> ap = app.getHospitalsPoints();
+
+        for (int i = 0; i < ap.size(); i++) {
+            if (ap.get(i).toString().equals(name)) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    private int calculateIndexPath(ArrayList nodes) {
+        int result = 0;
+        int distanceMin = calculateDistancePath((ArrayList) nodes.get(0));
+        for (int i = 0; i < nodes.size(); i++) {
+            ArrayList ab = (ArrayList) nodes.get(i);
+            int distance = calculateDistancePath(ab);
+            if (distanceMin > distance) {
+                distanceMin = distance;
+                result = i;
+            }
+        }
+        return result;
+    }
+
+    private int calculateDistancePath(ArrayList nodes) {
+        int result = 0;
+        for (int i = 0; i < nodes.size() - 1; i++) {
+            String path = nodes.get(i).toString() + "-" + nodes.get(i + 1).toString();
+            if (app.getEdgesNames().indexOf(path) == -1) {
+                path = nodes.get(i + 1).toString() + "-" + nodes.get(i).toString();
+            }
+            Edge ed = graph.getEdge(path);
+            int distance = ed.getAttribute("length");
+            result += distance;
+        }
+        return result;
+    }
+
+    public ArrayList getRoutes() {
+        ArrayList routes = new ArrayList();
+        ArrayList initPoints = app.getHospitalsPoints();
+        for (Object initPoint : initPoints) {
+            Dijkstra dijkstra = new Dijkstra(Dijkstra.Element.EDGE, null, "length");
+            dijkstra.init(graph);
+            dijkstra.setSource(graph.getNode(initPoint.toString()));
+            dijkstra.compute();
+            ArrayList result = new ArrayList();
+            for (Node node : dijkstra.getPathNodes(graph.getNode(emergency_depach_list.getModel().getSelectedItem().toString()))) {
+                result.add(0, node);
+            }
+            routes.add(result);
+            dijkstra.clear();
+        }
+        return routes;
+    }
 
     public void renderGraph() {
         ArrayList points = app.getPoints();
