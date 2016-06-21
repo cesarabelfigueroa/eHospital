@@ -1400,6 +1400,7 @@ public class eHospital extends javax.swing.JFrame {
                 String hospital = ((ArrayList) routes.get(index)).get(0).toString();
                 HospitalComplex hc = (HospitalComplex) app.getHospitalsPoints().get(findHospitalByName(hospital));
                 if (hc.getMedics().size() >= 1 && hc.getMedics().size() >= 3 && hc.getRanking().getValue() >= ((Emergency) location.getEmergencys().peekFirst()).getRanking().getValue()) {
+                    JOptionPane.showMessageDialog(null, "La ruta a seguir es: " + routes.get(index));
                     Thread center = new Despach(location, hc, distance);
                     center.run();
                     end = true;
