@@ -1,6 +1,7 @@
 package Graphics;
 
 import Resources.Ambulance;
+import Resources.Despach;
 import Resources.Emergency;
 import Resources.HospitalComplex;
 import Resources.Location;
@@ -1385,6 +1386,7 @@ public class eHospital extends javax.swing.JFrame {
                 break;
         }
         element.getEmergencys().addLast(new Emergency(ranking));
+        md.writeFiles(app);
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
@@ -1394,10 +1396,12 @@ public class eHospital extends javax.swing.JFrame {
             ArrayList routes = getRoutes();
             while (!end || routes.isEmpty()) {
                 int index = calculateIndexPath(getRoutes());
+                int distance = this.calculateDistancePath((ArrayList) routes.get(index));
                 String hospital = ((ArrayList) routes.get(index)).get(0).toString();
                 HospitalComplex hc = (HospitalComplex) app.getHospitalsPoints().get(findHospitalByName(hospital));
                 if (hc.getMedics().size() >= 1 && hc.getMedics().size() >= 3 && hc.getRanking().getValue() >= ((Emergency) location.getEmergencys().peekFirst()).getRanking().getValue()) {
-                    System.out.println("encontré");
+                    Thread center = new Despach(location, hc, distance);
+                    center.run();
                     end = true;
                 } else {
                     routes.remove(index);
@@ -1413,13 +1417,11 @@ public class eHospital extends javax.swing.JFrame {
 
     private int findHospitalByName(String name) {
         ArrayList<HospitalComplex> ap = app.getHospitalsPoints();
-
         for (int i = 0; i < ap.size(); i++) {
             if (ap.get(i).toString().equals(name)) {
                 return i;
             }
         }
-
         return -1;
     }
 
@@ -1430,8 +1432,7 @@ public class eHospital extends javax.swing.JFrame {
             ArrayList ab = (ArrayList) nodes.get(i);
             int distance = calculateDistancePath(ab);
             if (distanceMin > distance) {
-                distanceMin = distance;
-                result = i;
+                result = 1;
             }
         }
         return result;

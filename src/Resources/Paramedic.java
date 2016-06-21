@@ -2,7 +2,7 @@ package Resources;
 
 import java.io.Serializable;
 
-public class Paramedic implements Serializable {
+public class Paramedic implements Serializable,  Comparable {
 
     private String name;
     private int age;
@@ -72,5 +72,11 @@ public class Paramedic implements Serializable {
     @Override
     public String toString() {
         return name;
+    }
+
+    @Override
+    public int compareTo(Object comparestu) {
+        int compareage = ((Paramedic) comparestu).getRanking().getValue();
+        return compareage - this.getRanking().getValue();
     }
 }

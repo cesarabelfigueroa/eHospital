@@ -2,9 +2,8 @@ package Resources;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-
-
-
+import java.util.ArrayDeque;
+import java.util.Collections;
 
 public class HospitalComplex implements Serializable {
 
@@ -81,6 +80,23 @@ public class HospitalComplex implements Serializable {
 
     public void setAmbulancesObjects(ArrayList<Ambulance> ambulancesObjects) {
         this.ambulancesObjects = ambulancesObjects;
+    }
+
+    public ArrayDeque getRankingParamedics() {
+        ArrayDeque paramedics = new ArrayDeque();
+        Collections.sort(medics);
+        for (int i = 0; i < medics.size(); i++) {
+            if (((Paramedic) medics.get(i)).isActive()) {
+                if (paramedics.size() < 3) {
+                    ((Paramedic) medics.get(i)).setActive(false);
+                    paramedics.add((Paramedic) medics.get(i));
+                    paramedics.remove(i);
+                } else {
+                    break;
+                }
+            }
+        }
+        return paramedics;
     }
 
     @Override
