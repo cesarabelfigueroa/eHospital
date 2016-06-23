@@ -19,24 +19,28 @@ public class Despach extends Thread {
 
     @Override
     public void run() {
-        Emergency emergency = (Emergency) location.getEmergencys().pop();
-        ArrayDeque paramedics = hospital.getRankingParamedics();
-        Ambulance ambulance = hospital.getAmbulancesObjects().get(0);
-        hospital.getAmbulancesObjects().remove(0);
-        JOptionPane.showMessageDialog(null, "Se enviaron los paramedicos necesarios.");
-        int time = (int) ((int) distance / ambulance.getSpeed());
-        JOptionPane.showMessageDialog(null, "El tiempo que se tardarán es: " + time);
-        try {
-            Thread.sleep(time * 1000);
-            while (!paramedics.isEmpty()) {
-                Paramedic element = ((Paramedic) paramedics.pop());
-                element.setActive(true);
-                hospital.getMedics().add(element);
-                hospital.getAmbulancesObjects().add(ambulance);
+        if ((Emergency) location.getEmergencys().peek() != null && hospital.getAmbulancesObjects().size() > 0) {
+            Emergency emergency = (Emergency) location.getEmergencys().pop();
+            ArrayDeque paramedics = hospital.getRankingParamedics();
+            Ambulance ambulance = hospital.getAmbulancesObjects().get(0);
+            hospital.getAmbulancesObjects().remove(0);
+            JOptionPane.showMessageDialog(null, "Se enviaron los paramedicos necesarios.");
+            int time = (int) ((int) distance / ambulance.getSpeed());
+            JOptionPane.showMessageDialog(null, "El tiempo que se tardarán es: " + time);
+            try {
+                Thread.sleep(time * 1000);
+                while (!paramedics.isEmpty()) {
+                    Paramedic element = ((Paramedic) paramedics.pop());
+                    element.setActive(true);
+                    hospital.getMedics().add(element);
+                    hospital.getAmbulancesObjects().add(ambulance);
+                }
+                JOptionPane.showMessageDialog(null, "Regresaron los paramédicos.");
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Despach.class.getName()).log(Level.SEVERE, null, ex);
             }
-            JOptionPane.showMessageDialog(null, "Regresaron los paramédicos.");
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Despach.class.getName()).log(Level.SEVERE, null, ex);
+        } else {
+            JOptionPane.showMessageDialog(null, "Un error en el proceso, intente de nuevo, no se cumplieron los requisitos.");
         }
     }
 }

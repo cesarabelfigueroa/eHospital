@@ -10,6 +10,7 @@ import Resources.Ranking;
 import Resources.Route;
 import Services.Application;
 import Services.ModelService;
+import Services.ThreadService;
 import java.awt.Component;
 import java.awt.Image;
 import java.util.ArrayList;
@@ -32,9 +33,9 @@ import org.graphstream.ui.view.Viewer;
 
 public class eHospital extends javax.swing.JFrame {
 
-    Application app = new Application();
-    ModelService md = new ModelService();
-    Graph graph = new MultiGraph("embedded");
+    public Application app = new Application();
+    public ModelService md = new ModelService();
+    public Graph graph = new MultiGraph("embedded");
 
     public eHospital() {
         Application readAPP = md.readFiles();
@@ -1391,32 +1392,16 @@ public class eHospital extends javax.swing.JFrame {
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
         Location location = (Location) emergency_depach_list.getModel().getSelectedItem();
-        boolean end = false;
-        if (location.getEmergencys().size() > 0) {
-            ArrayList routes = getRoutes();
-            while (!end || routes.isEmpty()) {
-                int index = calculateIndexPath(getRoutes());
-                int distance = this.calculateDistancePath((ArrayList) routes.get(index));
-                String hospital = ((ArrayList) routes.get(index)).get(0).toString();
-                HospitalComplex hc = (HospitalComplex) app.getHospitalsPoints().get(findHospitalByName(hospital));
-                if (hc.getMedics().size() >= 1 && hc.getMedics().size() >= 3 && hc.getRanking().getValue() >= ((Emergency) location.getEmergencys().peekFirst()).getRanking().getValue()) {
-                    JOptionPane.showMessageDialog(null, "La ruta a seguir es: " + routes.get(index));
-                    Thread center = new Despach(location, hc, distance);
-                    center.run();
-                    end = true;
-                } else {
-                    routes.remove(index);
-                }
-            }
-            if (!end) {
-                JOptionPane.showMessageDialog(null, "No hay ningun centro que pueda atender su solicitud.");
-            }
+        if (app.getEdgesNames().size() >= app.getPointsNames().size() - 1 + app.getHospitalsPoints().size()) {
+            Thread service = new ThreadService(this, location);
+            service.start();
         } else {
-            JOptionPane.showMessageDialog(null, "La localización no tiene ninguna emergencia.");
+            JOptionPane.showMessageDialog(null, "El mapa tiene problemas.");
         }
+
     }//GEN-LAST:event_jButton9ActionPerformed
 
-    private int findHospitalByName(String name) {
+    public int findHospitalByName(String name) {
         ArrayList<HospitalComplex> ap = app.getHospitalsPoints();
         for (int i = 0; i < ap.size(); i++) {
             if (ap.get(i).toString().equals(name)) {
@@ -1426,20 +1411,20 @@ public class eHospital extends javax.swing.JFrame {
         return -1;
     }
 
-    private int calculateIndexPath(ArrayList nodes) {
+    public int calculateIndexPath(ArrayList nodes) {
         int result = 0;
         int distanceMin = calculateDistancePath((ArrayList) nodes.get(0));
         for (int i = 0; i < nodes.size(); i++) {
             ArrayList ab = (ArrayList) nodes.get(i);
             int distance = calculateDistancePath(ab);
             if (distanceMin > distance) {
-                result = 1;
+                result = i;
             }
         }
         return result;
     }
 
-    private int calculateDistancePath(ArrayList nodes) {
+    public int calculateDistancePath(ArrayList nodes) {
         int result = 0;
         for (int i = 0; i < nodes.size() - 1; i++) {
             String path = nodes.get(i).toString() + "-" + nodes.get(i + 1).toString();
