@@ -25,10 +25,10 @@ public class Despach extends Thread {
             Ambulance ambulance = hospital.getAmbulancesObjects().get(0);
             hospital.getAmbulancesObjects().remove(0);
             JOptionPane.showMessageDialog(null, "Se enviaron los paramedicos necesarios.");
-            int time = (int) ((int) distance / ambulance.getSpeed());
+            long time = (long) ((double) distance / ambulance.getSpeed());
             JOptionPane.showMessageDialog(null, "El tiempo que se tardarán es: " + time);
             try {
-                Thread.sleep(time * 1000);
+                Thread.sleep(2 * time * 1000);
                 while (!paramedics.isEmpty()) {
                     Paramedic element = ((Paramedic) paramedics.pop());
                     element.setActive(true);
